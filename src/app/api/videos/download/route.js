@@ -2,7 +2,7 @@ import { MongoClient, ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 
 const MONGODB_URI = process.env.MONGODB_URI;
-const DB_NAME = "commercial-bank";
+const DB_NAME = process.env.MONGODB_DB_NAME;
 const COLLECTION_NAME = "videos";
 
 let cachedClient = null;
@@ -30,14 +30,14 @@ export async function POST(request) {
     if (!videoId) {
       return NextResponse.json(
         { success: false, error: "Video ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!ObjectId.isValid(videoId)) {
       return NextResponse.json(
         { success: false, error: "Invalid video ID format" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -46,7 +46,7 @@ export async function POST(request) {
 
     await collection.updateOne(
       { _id: new ObjectId(videoId) },
-      { $inc: { downloads: 1 } }
+      { $inc: { downloads: 1 } },
     );
 
     return NextResponse.json({ success: true });
@@ -54,7 +54,7 @@ export async function POST(request) {
     console.error("Error tracking download:", error);
     return NextResponse.json(
       { success: false, error: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
