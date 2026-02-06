@@ -105,7 +105,7 @@ export default function VideoViewPage({ videoId }) {
           body: JSON.stringify({
             url: videoUrl,
           }),
-        }
+        },
       );
 
       if (!importResponse.ok) {
@@ -137,7 +137,7 @@ export default function VideoViewPage({ videoId }) {
               audio_codec: "aac",
             },
           }),
-        }
+        },
       );
 
       if (!convertResponse.ok) {
@@ -163,7 +163,7 @@ export default function VideoViewPage({ videoId }) {
           body: JSON.stringify({
             input: convertTaskId,
           }),
-        }
+        },
       );
 
       if (!exportResponse.ok) {
@@ -192,7 +192,7 @@ export default function VideoViewPage({ videoId }) {
     taskId,
     minProgress = 0,
     maxProgress = 100,
-    maxAttempts = 120
+    maxAttempts = 120,
   ) => {
     for (let i = 0; i < maxAttempts; i++) {
       const response = await fetch(
@@ -201,7 +201,7 @@ export default function VideoViewPage({ videoId }) {
           headers: {
             Authorization: `Bearer ${FREECONVERT_API_KEY}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -254,7 +254,7 @@ export default function VideoViewPage({ videoId }) {
         `CommercialBank-${video.id}.${fileExtension}`,
         {
           type: mimeType,
-        }
+        },
       );
 
       if (navigator.canShare({ files: [file] })) {
@@ -301,7 +301,7 @@ export default function VideoViewPage({ videoId }) {
       // The original logic relied on this outer catch block to handle errors.
       triggerDownload(
         convertedBlob,
-        `CommercialBank-${video.id}.${fileExtension}`
+        `CommercialBank-${video.id}.${fileExtension}`,
       );
     } catch (err) {
       console.error("Download fallback failed:", err);
@@ -363,16 +363,31 @@ export default function VideoViewPage({ videoId }) {
 
   if (loading) {
     return (
-      <div className="min-h-svh bg-white relative overflow-hidden flex items-center justify-center px-4">
-        <div className="absolute top-0 h-56 w-full bg-gradient-to-b from-[#AFE3F9] to-transparent"></div>
-        <div className="absolute bottom-0 h-56 w-full bg-gradient-to-t from-[#AFE3F9] to-transparent"></div>
+      <div className="min-h-svh hs relative overflow-hidden flex items-center justify-center px-4 bg-gradient-to-br from-[#442E8D] via-[#702A8C] to-[#442E8D]">
+        <div className="bg-[#2C2151] absolute top-0 z-10 px-16 py-4 rounded-b-3xl shadow-2xl">
+          <img src="/images/closeup-logo.png" className="w-[14rem] h-auto" />
+        </div>
+
+        <div className="absolute bottom-5 z-0 opacity-5">
+          <img src="/images/closeup-logo.png" className="w-[22rem] h-auto" />
+        </div>
+
+        <img
+          src="/images/pattern.png"
+          className="absolute top-0 w-full h-auto opacity-20 z-0 float"
+        />
+        <img
+          src="/images/pattern.png"
+          className="absolute bottom-0 rotate-180 w-full h-auto opacity-10 z-0 float"
+        />
+
         <div className="text-center relative z-10">
           <div className="relative w-20 h-20 mx-auto mb-6">
             <div className="absolute inset-0">
               <TikTokLoader />
             </div>
           </div>
-          <p className="text-black text-xl font-medium">
+          <p className="text-white text-xl font-medium font-righteous uppercase text-center">
             Video is Getting Ready...
           </p>
         </div>
@@ -402,44 +417,52 @@ export default function VideoViewPage({ videoId }) {
 
   if (error) {
     return (
-      <div className="min-h-svh bg-white flex items-center justify-center px-4">
+      <div className="min-h-svh hs relative overflow-hidden flex items-center justify-center px-4 bg-gradient-to-br from-[#442E8D] via-[#702A8C] to-[#442E8D]">
+        <div className="bg-[#2C2151] absolute top-0 z-10 px-16 py-4 rounded-b-3xl shadow-2xl">
+          <img src="/images/closeup-logo.png" className="w-[14rem] h-auto" />
+        </div>
+
+        <div className="absolute bottom-5 z-0 opacity-5">
+          <img src="/images/closeup-logo.png" className="w-[22rem] h-auto" />
+        </div>
+
+        <img
+          src="/images/pattern.png"
+          className="absolute top-0 w-full h-auto opacity-20 z-0 float"
+        />
+        <img
+          src="/images/pattern.png"
+          className="absolute bottom-0 rotate-180 w-full h-auto opacity-10 z-0 float"
+        />
         <div className="text-center max-w-md">
           <div className="text-7xl mb-6">⚠️</div>
-          <h2 className="text-black text-3xl font-bold mb-3">
+          <h2 className="text-white text-3xl font-bold mb-3 uppercase font-righteous">
             Video Not Found
           </h2>
-          <p className="text-gray-400 text-lg">{error}</p>
+          {/* <p className="text-gray-400 text-lg">{error}</p> */}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="h-svh bg-white relative overflow-hidden flex flex-col justify-center items-center">
-      <div className="absolute top-0 h-100 w-full bg-gradient-to-b from-[#AFE3F9] to-transparent">
-        <img
-          src="/images/circle.png"
-          alt=""
-          className="absolute bottom-30 left-50 opacity-20 z-0 animate-[spin_6s_linear_infinite]"
-        />
-        <img
-          src="/images/halftone.png"
-          alt=""
-          className="absolute scale-150  bottom-30 rotate-180 right-50 opacity-100 z-0"
-        />
+    <div className="h-svh bg-white relative overflow-hidden flex flex-col justify-center items-center bg-gradient-to-br from-[#442E8D] via-[#702A8C] to-[#442E8D] px-4">
+      <div className="bg-[#2C2151] absolute top-0 z-10 px-16 py-4 rounded-b-3xl shadow-2xl">
+        <img src="/images/closeup-logo.png" className="w-[14rem] h-auto" />
       </div>
-      <div className="absolute bottom-0 h-100 w-full bg-gradient-to-t from-[#AFE3F9] to-transparent">
-        <img
-          src="/images/circle.png"
-          alt=""
-          className="absolute top-30 right-50 opacity-20 z-0 animate-[spin_6s_linear_infinite]"
-        />
-        <img
-          src="/images/halftone.png"
-          alt=""
-          className="absolute scale-150 top-30 rotate-180 left-50 opacity-100 z-0"
-        />
+
+      <div className="absolute bottom-5 z-0 opacity-5">
+        <img src="/images/closeup-logo.png" className="w-[22rem] h-auto" />
       </div>
+
+      <img
+        src="/images/pattern.png"
+        className="absolute top-0 w-full h-auto opacity-20 z-0 float"
+      />
+      <img
+        src="/images/pattern.png"
+        className="absolute bottom-0 rotate-180 w-full h-auto opacity-10 z-0 float"
+      />
       {/* <header className=" top-0 z-50 relative w-full flex justify-center items-center">
         <motion.div
           className="container mx-auto px-4 pt-4 flex justify-center items-center"
@@ -459,7 +482,7 @@ export default function VideoViewPage({ videoId }) {
       </header> */}
 
       <main className="container flex-col flex justify-center items-center mx-auto px-4 py-6 sm:py-10 max-w-2xl">
-        <div className="relative rounded-2xl w-fit flex justify-center sm:rounded-3xl overflow-hidden mb-6 sm:mb-8 border-4 border-[#0A70B8]">
+        <div className="relative rounded-2xl w-fit flex justify-center sm:rounded-3xl overflow-hidden mb-6 sm:mb-8 border-4 border-[#2C2151]">
           <AnimatePresence mode="wait">
             <motion.video
               key="video-ready"
@@ -486,14 +509,14 @@ export default function VideoViewPage({ videoId }) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 backdrop-blur-md z-10"
+                className="absolute inset-0 flex flex-col items-center justify-center bg-[#702A8C]/90 backdrop-blur-md z-10"
               >
                 <div className="relative w-20 h-20 mb-6">
                   <div className="absolute inset-0">
                     <TikTokLoader />
                   </div>
                 </div>
-                <p className="text-[#0A70B8] text-xl font-medium text-center">
+                <p className="text-white text-xl font-medium text-center">
                   Video is Getting Ready...
                 </p>
               </motion.div>
@@ -530,7 +553,7 @@ export default function VideoViewPage({ videoId }) {
                 disabled={
                   downloading || converting || preparingVideo || !convertedBlob
                 }
-                className="w-50 relative bg-[#0A70B8] border-4 border-[#4AB648] disabled:bg-gray-300 text-white font-bold py-4 sm:py-5 px-6 sm:px-8 rounded-full shadow-lg  flex items-center justify-center gap-3 text-base md:text-xl"
+                className="relative bg-white font-righteous uppercase disabled:bg-gray-300 text-[#702A8C] font-bold py-4 sm:py-5 px-20 sm:px-8 rounded-full shadow-lg  flex items-center justify-center gap-3 text-xl"
               >
                 {preparingVideo || converting ? (
                   <>
