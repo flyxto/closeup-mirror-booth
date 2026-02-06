@@ -557,12 +557,12 @@ export default function VideoViewPage({ videoId }) {
               >
                 {preparingVideo || converting ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-black"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-[#702A8C]"></div>
                     Preparing your video...
                   </>
                 ) : downloading ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-black"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-[#702A8C]"></div>
                     {isIOS ? "Opening..." : "Downloading..."}
                   </>
                 ) : (
