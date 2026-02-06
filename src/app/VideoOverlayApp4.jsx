@@ -82,10 +82,38 @@ const VideoTextOverlayApp = () => {
   const [cloudinaryUrl, setCloudinaryUrl] = useState("");
   const [showQRPopup, setShowQRPopup] = useState(false);
 
-  const CLOUDINARY_CLOUD_NAME =
-    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "vccpsacloud";
-  const CLOUDINARY_UPLOAD_PRESET =
-    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "my-uploads";
+  const getCloudinaryCredentials = () => {
+    const account = process.env.NEXT_PUBLIC_CLOUDINARY_ACCOUNT;
+
+    if (account === "A1") {
+      return {
+        cloudName:
+          process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME_A1 || "account1-cloud",
+        uploadPreset:
+          process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET_A1 || "preset-a1",
+      };
+    } else if (account === "A2") {
+      return {
+        cloudName:
+          process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME_A2 || "account2-cloud",
+        uploadPreset:
+          process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET_A2 || "preset-a2",
+      };
+    }
+
+    // Default fallback
+    return {
+      cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "vccpsacloud",
+      uploadPreset:
+        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "my-uploads",
+    };
+  };
+
+  const {
+    cloudName: CLOUDINARY_CLOUD_NAME,
+    uploadPreset: CLOUDINARY_UPLOAD_PRESET,
+  } = getCloudinaryCredentials();
+
   const [musicAudio, setMusicAudio] = useState(null);
   const [countdownAudio, setCountdownAudio] = useState(null);
 
