@@ -417,8 +417,9 @@ const VideoTextOverlayApp = () => {
 
         // Auto-upload to get QR code
         setIsQRLoading(true);
-        uploadToCloudinaryForQR(blob);
-        // uploadToR2ForQR(blob);
+
+        // uploadToCloudinaryForQR(blob); // Uncomment this to use CLOUDINARY instead of Cloudlflare
+        uploadToR2ForQR(blob); // comment this to use CLOUDINARY instead of Cloudlflare
       };
 
       webcamRecorderRef.current = recorder;
@@ -1001,63 +1002,74 @@ const VideoTextOverlayApp = () => {
     }
   };
 
-  // const uploadToR2ForQR = async (blob) => {
-  //   try {
-  //     // Convert blob to base64
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(blob);
+  const uploadToR2ForQR = async (blob) => {
+    try {
+      const filename = `video-${Date.now()}.webm`;
 
-  //     reader.onloadend = async () => {
-  //       const base64data = reader.result;
-  //       const filename = `video-${Date.now()}.webm`;
+      console.log(
+        "📤 Starting upload, file size:",
+        (blob.size / 1024 / 1024).toFixed(2),
+        "MB",
+      );
 
-  //       // Upload to R2
-  //       const response = await fetch("/api/upload-r2", {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ video: base64data, filename }),
-  //       });
+      // Create FormData
+      const formData = new FormData();
+      formData.append("video", blob, filename);
 
-  //       const data = await response.json();
+      console.log("📦 FormData created");
 
-  //       if (data.url) {
-  //         setCloudinaryUrl(data.url); // Reuse state for R2 URL
+      // Upload to R2
+      const response = await fetch("/api/upload-r2", {
+        method: "POST",
+        body: formData,
+      });
 
-  //         // Save to MongoDB
-  //         try {
-  //           const backendResponse = await fetch("/api/videos", {
-  //             method: "POST",
-  //             headers: { "Content-Type": "application/json" },
-  //             body: JSON.stringify({ videoUrl: data.url }),
-  //           });
+      console.log("📡 Response status:", response.status);
+      console.log("📡 Response ok:", response.ok);
 
-  //           const backendData = await backendResponse.json();
-  //           console.log("Backend response:", backendData);
-  //           const generatedVideoId = backendData.videoId;
-  //           setVideoId(generatedVideoId);
+      // Check if response is ok before parsing JSON
+      if (!response.ok) {
+        const text = await response.text();
+        console.error("❌ Response not ok. Body:", text);
+        throw new Error(`Upload failed with status ${response.status}`);
+      }
 
-  //           const shareUrl = `${window.location.origin}/${generatedVideoId}`;
-  //           setShareUrl(shareUrl);
-  //           setIsQRLoading(false);
-  //         } catch (backendError) {
-  //           console.error("Error sending to backend:", backendError);
-  //           setIsQRLoading(false);
-  //           alert("Failed to save to database. Please try again.");
-  //         }
-  //       } else {
-  //         throw new Error("Upload failed");
-  //       }
-  //     };
+      const data = await response.json();
+      console.log("✅ Upload response:", data);
 
-  //     reader.onerror = () => {
-  //       setIsQRLoading(false);
-  //       alert("Failed to process video. Please try again.");
-  //     };
-  //   } catch (error) {
-  //     console.error("Error uploading to R2:", error);
-  //     setIsQRLoading(false);
-  //   }
-  // };
+      if (data.url) {
+        setCloudinaryUrl(data.url);
+
+        // Save to MongoDB
+        try {
+          const backendResponse = await fetch("/api/videos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ videoUrl: data.url }),
+          });
+
+          const backendData = await backendResponse.json();
+          console.log("Backend response:", backendData);
+          const generatedVideoId = backendData.videoId;
+          setVideoId(generatedVideoId);
+
+          const shareUrl = `${window.location.origin}/${generatedVideoId}`;
+          setShareUrl(shareUrl);
+          setIsQRLoading(false);
+        } catch (backendError) {
+          console.error("Error sending to backend:", backendError);
+          setIsQRLoading(false);
+          alert("Failed to save to database. Please try again.");
+        }
+      } else {
+        throw new Error("No URL in response");
+      }
+    } catch (error) {
+      console.error("Error uploading to R2:", error);
+      setIsQRLoading(false);
+      alert("Upload failed: " + error.message);
+    }
+  };
 
   const uploadToCloudinary = async () => {
     if (!recordedBlob) return;
