@@ -251,7 +251,7 @@ export default function VideoViewPage({ videoId }) {
     if (isIOS && navigator.share && navigator.canShare) {
       const file = new File(
         [convertedBlob],
-        `CommercialBank-${video.id}.${fileExtension}`,
+        `Derana_Closeup_Music_Festival-${video.id}.${fileExtension}`,
         {
           type: mimeType,
         },
@@ -269,8 +269,8 @@ export default function VideoViewPage({ videoId }) {
 
           // Call the Share API IMMEDIATELY after the click/tap.
           await navigator.share({
-            title: "Commercial Bank Cards",
-            text: "My Commercial Bank Cards video",
+            title: "Derana Closeup Music Festival",
+            text: "Derana Closeup Music Festival - Check out my video!",
             files: [file],
           });
 
@@ -301,7 +301,7 @@ export default function VideoViewPage({ videoId }) {
       // The original logic relied on this outer catch block to handle errors.
       triggerDownload(
         convertedBlob,
-        `CommercialBank-${video.id}.${fileExtension}`,
+        `Derana_Closeup_Music_Festival-${video.id}.${fileExtension}`,
       );
     } catch (err) {
       console.error("Download fallback failed:", err);
@@ -341,14 +341,18 @@ export default function VideoViewPage({ videoId }) {
       const response = await fetch(downloadUrl);
       const blob = await response.blob();
 
-      const file = new File([blob], `CommercialBank-${video.id}.mp4`, {
-        type: "video/mp4",
-      });
+      const file = new File(
+        [blob],
+        `Derana_Closeup_Music_Festival-${video.id}.mp4`,
+        {
+          type: "video/mp4",
+        },
+      );
 
       if (navigator.share) {
         await navigator.share({
-          title: "Check out my Commercial Bank Cards video!",
-          text: "Created with Commercial Bank Cards",
+          title: "Derana Closeup Music Festival",
+          text: "Derana Closeup Music Festival - Check out my video!",
           files: [file],
         });
       }
