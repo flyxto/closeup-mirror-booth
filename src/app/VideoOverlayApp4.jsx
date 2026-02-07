@@ -120,7 +120,7 @@ const VideoTextOverlayApp = () => {
   // Initialize background music
   useEffect(() => {
     if (!musicAudioRef.current) {
-      const audio = new Audio("/audio/bg_music.mp3");
+      const audio = new Audio("/audio/closeup-audio-1.mp3");
       audio.loop = true;
       audio.muted = true;
       audio.preload = "auto";
